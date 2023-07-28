@@ -1,7 +1,11 @@
-npm install express dotenv
+1. Troca o .env.example para .env
 
-npm i -D typescript @types/express @types/node
+2. Configura o .env com a porta e o token do supabase
 
-npx tsc --init
+3. Agora sim executa o comando abaixo
 
-npm install -D concurrently nodemon
+```bash
+npm install
+
+npm run dev
+```
