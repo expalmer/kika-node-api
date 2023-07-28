@@ -1,10 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
+const { createClient } = require("@supabase/supabase-js");
 
 const supabaseUrl = "https://luljfrheetwycovgnfgs.supabase.co";
 const supabaseKey = process.env.SUPABASE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export async function getTasks() {
+async function getTasks() {
   const { data, error } = await supabase.from("tasks").select("*");
   if (error) {
     throw error;
@@ -12,16 +12,15 @@ export async function getTasks() {
   return data;
 }
 
-export async function getTask(id: number) {
+async function getTask(id) {
   const { data, error } = await supabase.from("tasks").select().eq("id", id);
-
   if (error) {
     throw error;
   }
   return data ? data[0] : null;
 }
 
-export async function createTask(task: string) {
+async function createTask(task) {
   const { data, error } = await supabase
     .from("tasks")
     .insert({ task })
@@ -32,10 +31,7 @@ export async function createTask(task: string) {
   return data;
 }
 
-export async function updateTask(
-  id: number,
-  body: { task?: string; done?: string } = {}
-) {
+async function updateTask(id, body = {}) {
   const { data, error } = await supabase
     .from("tasks")
     .update(body)
@@ -46,10 +42,18 @@ export async function updateTask(
   return data;
 }
 
-export async function removeTask(id: number) {
+async function removeTask(id) {
   const { data, error } = await supabase.from("tasks").delete().eq("id", id);
   if (error) {
     throw error;
   }
   return data;
 }
+
+module.exports = {
+  getTasks,
+  getTask,
+  createTask,
+  updateTask,
+  removeTask,
+};

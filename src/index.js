@@ -1,31 +1,30 @@
-import "dotenv/config";
+require("dotenv").config();
 
-import {
+const {
   createTask,
   getTask,
   getTasks,
   removeTask,
   updateTask,
-} from "./client/supabase";
-import express, { Express, Request, Response } from "express";
+} = require("./client/database");
+const express = require("express");
+const bodyParser = require("body-parser");
 
-import bodyParser from "body-parser";
-
-const app: Express = express();
+const app = express();
 const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
-app.get("/tasks", async (req: Request, res: Response) => {
+app.get("/tasks", async (req, res) => {
   try {
     const tasks = await getTasks();
     res.json(tasks);
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.get("/tasks/:id", async (req: Request, res: Response) => {
+app.get("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -33,22 +32,22 @@ app.get("/tasks/:id", async (req: Request, res: Response) => {
 
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.post("/tasks", async (req: Request, res: Response) => {
+app.post("/tasks", async (req, res) => {
   try {
     const { task } = req.body;
 
     const newTask = await createTask(task);
     res.status(201).json(newTask);
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.put("/tasks/:id", async (req: Request, res: Response) => {
+app.put("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { task, done } = req.body;
@@ -57,11 +56,11 @@ app.put("/tasks/:id", async (req: Request, res: Response) => {
 
     res.status(204).end();
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.delete("/tasks/:id", async (req: Request, res: Response) => {
+app.delete("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -69,7 +68,7 @@ app.delete("/tasks/:id", async (req: Request, res: Response) => {
 
     res.status(204).end();
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    res.status(500).json({ error: error.message });
   }
 });
 
